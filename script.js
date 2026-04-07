@@ -124,7 +124,6 @@ function endRound() {
   avgTimeEl.textContent = `Average Time: ${avgTime.toFixed(2)}s`;
 }
 
-}
 
 // ==================== EVENT LISTENERS ====================
 playBtn.addEventListener("click", play);
