@@ -124,9 +124,6 @@ function endRound() {
   avgTimeEl.textContent = `Average Time: ${avgTime.toFixed(2)}s`;
 }
 
-let levelRadios=document.getElementsByName("level");
-for (let i=0; i<levelRadios.length; i++) {
-  levelRadios[i].disabled = true;
 }
 
 // ==================== EVENT LISTENERS ====================
