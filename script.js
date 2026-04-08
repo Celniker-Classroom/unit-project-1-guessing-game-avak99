@@ -11,6 +11,8 @@ let scores = [];
 let startTime = 0;
 let times = [];
 let fastestTime = null;
+let streak = 0;
+let totalGames = 0;
 
 const dateEl = document.getElementById("date");
 const msgEl = document.getElementById("msg");
@@ -24,116 +26,134 @@ const fastestEl = document.getElementById("fastest");
 const avgTimeEl = document.getElementById("avgTime");
 const leaderboardEls = document.getElementsByName("leaderboard");
 
-// ✅ NEW: difficulty inputs
 const diffInputs = document.querySelectorAll('input[name="difficulty"]');
 
-// ==================== DATE & TIME ====================
+// ✅ NEW: dark mode toggle
+const darkToggle = document.getElementById("darkModeToggle");
+
+// ==================== DATE ====================
 function time() {
   const now = new Date();
-  const months = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December"
-  ];
-  const day = now.getDate();
-  let suffix = "th";
-  if (day % 10 === 1 && day !== 11) suffix = "st";
-  else if (day % 10 === 2 && day !== 12) suffix = "nd";
-  else if (day % 10 === 3 && day !== 13) suffix = "rd";
-
-  const hours = now.getHours().toString().padStart(2,"0");
-  const minutes = now.getMinutes().toString().padStart(2,"0");
-  const seconds = now.getSeconds().toString().padStart(2,"0");
-
-  return `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()} ${hours}:${minutes}:${seconds}`;
+  return now.toLocaleString();
 }
+setInterval(() => dateEl.textContent = time(), 1000);
 
-dateEl.textContent = time();
-setInterval(() => {
-  dateEl.textContent = time();
-}, 1000);
-
-// ==================== GAME FUNCTIONS ====================
+// ==================== GAME ====================
 function getRange() {
   if (document.getElementById("e").checked) return 3;
   if (document.getElementById("m").checked) return 10;
-  return 100;
+  if (document.getElementById("h").checked) return 100;
+
+  // ✅ custom difficulty
+  const custom = Number(document.getElementById("customRange").value);
+  return custom > 0 ? custom : 10;
 }
 
 function play() {
   range = getRange();
   answer = Math.floor(Math.random() * range) + 1;
   guesses = 0;
-  guessInput.value = "";
+  totalGames++;
+
   guessInput.disabled = false;
   guessBtn.disabled = false;
   giveUpBtn.disabled = false;
   playBtn.disabled = true;
-  startTime = new Date().getTime();
-  msgEl.textContent = `${playerName}, guess a number between 1 and ${range}`;
 
-  // ✅ lock difficulty during round
+  startTime = Date.now();
+  msgEl.textContent = `${playerName}, guess 1–${range}`;
+
   diffInputs.forEach(input => input.disabled = true);
 }
 
+// ==================== GUESS ====================
 function makeGuess() {
   const guess = Number(guessInput.value);
+
+  // ✅ input validation
+  if (isNaN(guess)) {
+    msgEl.textContent = "Enter a NUMBER.";
+    return;
+  }
+  if (guess < 1 || guess > range) {
+    msgEl.textContent = `Stay between 1 and ${range}`;
+    return;
+  }
+
   guesses++;
+
   if (guess === answer) {
-    msgEl.textContent = `Correct, ${playerName}! You got it in ${guesses} guesses.`;
-    guessBtn.disabled = true;
-    guessInput.disabled = true;
+    let quality = "Needs work";
+    if (guesses <= 2) quality = "Amazing!";
+    else if (guesses <= 5) quality = "Good";
+
+    msgEl.textContent = `Correct! ${quality}`;
+
+    // ✅ sound effect
+    new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3").play();
+
+    // ✅ animation
+    msgEl.style.transform = "scale(1.2)";
+    setTimeout(() => msgEl.style.transform = "scale(1)", 200);
+
+    streak++;
     endRound();
   } else {
     let feedback = guess > answer ? "high" : "low";
-    const diff = Math.abs(guess - answer);
-    if (diff <= 2) feedback += ", hot";
-    else if (diff <= 5) feedback += ", warm";
-    else feedback += ", cold";
-    msgEl.textContent = `Your guess is too ${feedback}. Try again, ${playerName}!`;
+    msgEl.textContent = `Too ${feedback}`;
+    streak = 0;
   }
+
   guessInput.value = "";
 }
 
 function giveUp() {
   guesses = range;
-  msgEl.textContent = `${playerName} gave up. The number was ${answer}. Score set to ${range}.`;
-  guessBtn.disabled = true;
-  guessInput.disabled = true;
-  giveUpBtn.disabled = true;
+  msgEl.textContent = `You gave up. Answer: ${answer}`;
+  streak = 0;
   endRound();
 }
 
+// ==================== END ROUND ====================
 function endRound() {
   playBtn.disabled = false;
+  guessBtn.disabled = true;
+  guessInput.disabled = true;
 
-  // Update scores & stats
   wins++;
   totalGuesses += guesses;
-  scores.push(guesses);
-  scores.sort((a,b) => a-b);
 
-  winsEl.textContent = `Total wins: ${wins}`;
-  avgScoreEl.textContent = `Average Score: ${(totalGuesses / wins).toFixed(2)}`;
+  scores.push(guesses);
+  scores.sort((a,b)=>a-b);
+
+  winsEl.textContent = `Wins: ${wins} | Streak: ${streak} | Win %: ${((wins/totalGames)*100).toFixed(1)}%`;
+  avgScoreEl.textContent = `Avg Score: ${(totalGuesses / wins).toFixed(2)}`;
 
   for (let i = 0; i < 3; i++) {
-    leaderboardEls[i].textContent = scores[i] !== undefined ? scores[i] : "--";
+    leaderboardEls[i].textContent = scores[i] || "--";
   }
 
-  // Update timers
-  const endTime = new Date().getTime();
-  const roundTime = (endTime - startTime) / 1000;
-  times.push(roundTime);
-  fastestTime = fastestTime === null ? roundTime : Math.min(fastestTime, roundTime);
+  const timeTaken = (Date.now() - startTime) / 1000;
+  times.push(timeTaken);
+  fastestTime = fastestTime === null ? timeTaken : Math.min(fastestTime, timeTaken);
 
-  fastestEl.textContent = `Fastest Game: ${fastestTime.toFixed(2)}s`;
-  const avgTime = times.reduce((a,b)=>a+b,0)/times.length;
-  avgTimeEl.textContent = `Average Time: ${avgTime.toFixed(2)}s`;
+  fastestEl.textContent = `Fastest: ${fastestTime.toFixed(2)}s`;
+  avgTimeEl.textContent = `Avg Time: ${(times.reduce((a,b)=>a+b)/times.length).toFixed(2)}s`;
 
-  // ✅ unlock difficulty after round
   diffInputs.forEach(input => input.disabled = false);
 }
 
-// ==================== EVENT LISTENERS ====================
+// ==================== DARK MODE ====================
+darkToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+});
+
+// ==================== KEYBOARD SUPPORT ====================
+guessInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") makeGuess();
+});
+
+// ==================== EVENTS ====================
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
