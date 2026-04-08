@@ -15,12 +15,12 @@
   <p id="date"></p>
 
   <div class="card">
-    <h3>Select Level</h3>
+    <h3>Select Difficulty</h3>
 
-    <label><input type="radio" name="level" value="3" id="easy" checked> Easy</label>
-    <label><input type="radio" name="level" value="10" id="medium"> Medium</label>
-    <label><input type="radio" name="level" value="100" id="hard"> Hard</label>
-    <label><input type="radio" name="level" value="custom" id="custom"> Custom</label>
+    <label><input type="radio" name="level" id="easy" value="3" checked> Easy</label>
+    <label><input type="radio" name="level" id="medium" value="10"> Medium</label>
+    <label><input type="radio" name="level" id="hard" value="100"> Hard</label>
+    <label><input type="radio" name="level" id="custom" value="custom"> Custom</label>
 
     <br><br>
 
@@ -30,7 +30,7 @@
   <button id="playBtn">Play</button>
   <button id="darkModeToggle">Toggle Dark Mode</button>
 
-  <h3 id="msg">Select a level and press play</h3>
+  <h3 id="msg">Select a level</h3>
 
   <div class="card">
     <input type="number" id="guess" placeholder="Enter guess" disabled>

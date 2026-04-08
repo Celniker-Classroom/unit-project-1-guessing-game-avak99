@@ -7,7 +7,7 @@ let scores = [];
 let times = [];
 let startTime = 0;
 let fastestTime = null;
-let totalGames = 0;
+let previousDiff = null;
 
 const dateEl = document.getElementById("date");
 const msgEl = document.getElementById("msg");
@@ -34,11 +34,7 @@ updateDate();
 
 radios.forEach(radio => {
   radio.addEventListener("change", () => {
-    if (document.getElementById("custom").checked) {
-      customInput.disabled = false;
-    } else {
-      customInput.disabled = true;
-    }
+    customInput.disabled = !document.getElementById("custom").checked;
   });
 });
 
@@ -51,7 +47,6 @@ function getRange() {
     const val = Number(customInput.value);
     return val > 0 ? val : 10;
   }
-
   return 10;
 }
 
@@ -59,7 +54,7 @@ function play() {
   range = getRange();
   answer = Math.floor(Math.random() * range) + 1;
   guesses = 0;
-  totalGames++;
+  previousDiff = null;
 
   guessInput.disabled = false;
   guessBtn.disabled = false;
@@ -74,6 +69,11 @@ function play() {
   msgEl.textContent = `Guess a number between 1 and ${range}`;
 }
 
+function playSound() {
+  const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+  audio.play();
+}
+
 function makeGuess() {
   const guess = Number(guessInput.value);
 
@@ -84,33 +84,36 @@ function makeGuess() {
 
   guesses++;
 
+  const diff = Math.abs(guess - answer);
+
+  let proximity = "cold";
+  if (diff <= 2) proximity = "hot";
+  else if (diff <= 5) proximity = "warm";
+
+  let direction = "";
+  if (previousDiff !== null) {
+    if (diff < previousDiff) direction = "warmer";
+    else if (diff > previousDiff) direction = "cooler";
+  }
+  previousDiff = diff;
+
   if (guess === answer) {
     msgEl.textContent = "Correct!";
-
     playSound();
 
     updateStats(guesses);
     endRound();
   } else {
-    const diff = Math.abs(guess - answer);
-
-    let temp = "cold";
-    if (diff <= 2) temp = "hot";
-    else if (diff <= 5) temp = "warm";
-
-    msgEl.textContent = guess > answer ? `Too high (${temp})` : `Too low (${temp})`;
+    const highLow = guess > answer ? "high" : "low";
+    msgEl.textContent = `Too ${highLow} | ${proximity} ${direction}`;
   }
 
   guessInput.value = "";
 }
 
-function playSound() {
-  const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
-  audio.play();
-}
-
 function giveUp() {
   msgEl.textContent = `The answer was ${answer}`;
+  updateStats(range);
   endRound();
 }
 
@@ -124,9 +127,9 @@ function updateStats(score) {
   winsEl.textContent = `Wins: ${wins}`;
   avgScoreEl.textContent = `Average Score: ${(totalGuesses / wins).toFixed(2)}`;
 
-  scores.slice(0, 3).forEach((s, i) => {
-    leaderboardEls[i].textContent = s;
-  });
+  for (let i = 0; i < 3; i++) {
+    leaderboardEls[i].textContent = scores[i] || "--";
+  }
 
   const endTime = new Date().getTime();
   const timeTaken = (endTime - startTime) / 1000;
