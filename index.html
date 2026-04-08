@@ -6,42 +6,52 @@
 </head>
 <body>
 
-  <!-- DATE -->
-  <p id="date"></p>
+  <div class="container">
 
-  <!-- DIFFICULTY -->
-  <div>
-    <input type="radio" name="level" id="e" value="3"> Easy
-    <input type="radio" name="level" id="m" value="10"> Medium
-    <input type="radio" name="level" id="h" value="100"> Hard
-    <input type="radio" name="level" id="c" value="50"> Custom
+    <!-- DATE -->
+    <p id="date" class="date"></p>
+
+    <h1 class="title">🎯 Guessing Game</h1>
+
+    <!-- DIFFICULTY -->
+    <div class="levels">
+      <label><input type="radio" name="level" id="e" value="3"> Easy</label>
+      <label><input type="radio" name="level" id="m" value="10"> Medium</label>
+      <label><input type="radio" name="level" id="h" value="100"> Hard</label>
+      <label><input type="radio" name="level" id="c" value="50"> Custom</label>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="buttons">
+      <button id="playBtn">Play</button>
+      <button id="guessBtn">Guess</button>
+      <button id="giveUpBtn">Give Up</button>
+    </div>
+
+    <input id="guess" type="number" placeholder="Enter your guess">
+
+    <!-- MESSAGE -->
+    <h3 id="msg"></h3>
+
+    <!-- STATS -->
+    <div class="stats">
+      <p>Wins: <span id="wins"></span></p>
+      <p>Avg Score: <span id="avgScore"></span></p>
+      <p>Fastest Time: <span id="fastest"></span></p>
+      <p>Avg Time: <span id="avgTime"></span></p>
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div class="leaderboard">
+      <h3>🏆 Leaderboard</h3>
+      <ol>
+        <li name="leaderboard"></li>
+        <li name="leaderboard"></li>
+        <li name="leaderboard"></li>
+      </ol>
+    </div>
+
   </div>
-
-  <!-- CONTROLS -->
-  <button id="playBtn">Play</button>
-  <button id="guessBtn">Guess</button>
-  <button id="giveUpBtn">Give Up</button>
-
-  <br><br>
-
-  <input id="guess" type="number">
-
-  <!-- MESSAGE -->
-  <h3 id="msg"></h3>
-
-  <!-- STATS -->
-  <p id="wins"></p>
-  <p id="avgScore"></p>
-
-  <p id="fastest"></p>
-  <p id="avgTime"></p>
-
-  <!-- LEADERBOARD -->
-  <ol>
-    <li name="leaderboard"></li>
-    <li name="leaderboard"></li>
-    <li name="leaderboard"></li>
-  </ol>
 
   <script src="script.js"></script>
 </body>

@@ -1,65 +1,116 @@
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ffe4f1, #ffd1dc);
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7, #ffdde1);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
   text-align: center;
-  padding: 20px;
+  color: #333;
 }
 
-/* Buttons */
-button {
-  background: linear-gradient(135deg, #ff6fa1, #ff3d7f);
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  margin: 5px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+.container {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  width: 80%;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Input */
-input[type="number"] {
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* Headings */
-h3 {
-  color: #d63384;
-}
-
-/* Leaderboard */
-ol {
-  display: inline-block;
-  text-align: left;
-  padding: 10px 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+/* Title */
+.title {
+  font-size: 2.5em;
+  background: linear-gradient(45deg, #ff4d6d, #ff85a2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Date */
-#date {
+.date {
   font-weight: bold;
   color: #6a1b9a;
 }
 
-/* Radios */
-input[type="radio"] {
-  margin: 5px;
-  transform: scale(1.2);
+/* Buttons */
+button {
+  background: linear-gradient(135deg, #ff4d6d, #ff85a2);
+  border: none;
+  padding: 12px 18px;
+  margin: 8px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255,77,109,0.4);
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,77,109,0.6);
+}
+
+button:disabled {
+  background: #ccc;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Input */
+input[type="number"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #ff85a2;
+  margin-top: 10px;
+  outline: none;
+  transition: 0.3s;
+}
+
+input[type="number"]:focus {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 10px rgba(255,77,109,0.4);
+}
+
+/* Levels */
+.levels label {
+  margin: 0 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.levels label:hover {
+  color: #ff4d6d;
+  transform: scale(1.1);
+}
+
+/* Stats */
+.stats {
+  margin-top: 20px;
+}
+
+/* Leaderboard */
+.leaderboard {
+  margin-top: 25px;
+}
+
+ol {
+  display: inline-block;
+  padding: 15px 25px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff, #ffe0ec);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Message */
+#msg {
+  margin-top: 15px;
+  font-size: 1.2em;
+  color: #d63384;
 }

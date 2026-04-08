@@ -1,4 +1,3 @@
-// ================= STATE =================
 let answer;
 let range;
 let guessCount = 0;
@@ -7,15 +6,12 @@ let wins = 0;
 let totalGuesses = 0;
 
 let scores = [];
-
 let startTime;
 let times = [];
 
 let playerName = prompt("Enter your name:");
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
-
-// ================= ELEMENTS =================
 const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
@@ -27,7 +23,6 @@ playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
 
-// initial state
 guessBtn.disabled = true;
 giveUpBtn.disabled = true;
 
@@ -57,8 +52,7 @@ function time() {
   let seconds = String(now.getSeconds()).padStart(2, "0");
 
   let ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
+  hours = hours % 12 || 12;
 
   return `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()} ${hours}:${minutes}:${seconds} ${ampm}`;
 }
@@ -98,13 +92,16 @@ function makeGuess() {
 
   let msg = "";
 
-  if (guess > answer) {
-    msg = "Too high";
-  } else if (guess < answer) {
-    msg = "Too low";
-  } else {
-    msg = "Correct";
+  if (guess > answer) msg = "Too high";
+  else if (guess < answer) msg = "Too low";
+  else msg = "Correct";
 
+  if (guess !== answer) {
+    let diff = Math.abs(guess - answer);
+    if (diff <= 2) msg += " Hot";
+    else if (diff <= 5) msg += " Warm";
+    else msg += " Cold";
+  } else {
     guessBtn.disabled = true;
 
     wins++;
@@ -114,14 +111,6 @@ function makeGuess() {
     updateTimers(new Date().getTime());
 
     reset();
-  }
-
-  if (guess !== answer) {
-    let diff = Math.abs(guess - answer);
-
-    if (diff <= 2) msg += " Hot";
-    else if (diff <= 5) msg += " Warm";
-    else msg += " Cold";
   }
 
   document.getElementById("msg").textContent =
