@@ -1,61 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pink Guessing Game</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <title>Guessing Game</title>
 </head>
-
 <body>
-
-<div class="container">
-
-  <h1 class="title">Guessing Game</h1>
 
   <p id="date"></p>
 
-  <div class="card">
-    <h3>Select Difficulty</h3>
-
-    <label><input type="radio" name="level" id="e" value="3" checked> Easy</label>
-    <label><input type="radio" name="level" id="m" value="10"> Medium</label>
-    <label><input type="radio" name="level" id="h" value="100"> Hard</label>
-
-    <br><br>
-
-    <input type="number" id="customRange" placeholder="Enter max number" disabled>
+  <div>
+    <input type="radio" name="level" id="e" value="3"> Easy
+    <input type="radio" name="level" id="m" value="10"> Medium
+    <input type="radio" name="level" id="h" value="100"> Hard
   </div>
 
   <button id="playBtn">Play</button>
-  <button id="darkModeToggle">Toggle Dark Mode</button>
+  <button id="guessBtn">Guess</button>
+  <button id="giveUpBtn">Give Up</button>
 
-  <h3 id="msg">Select a level</h3>
+  <br><br>
 
-  <div class="card">
-    <input type="number" id="guess" placeholder="Enter guess" disabled>
-    <br>
-    <button id="guessBtn" disabled>Guess</button>
-    <button id="giveUpBtn" disabled>Give Up</button>
-  </div>
+  <input id="guess" type="number">
 
-  <div class="card">
-    <h3>Stats</h3>
-    <p id="wins">Wins: 0</p>
-    <p id="avgScore">Average Score: 0</p>
-    <p id="fastest">Fastest: --</p>
-    <p id="avgTime">Average Time: --</p>
-  </div>
+  <h3 id="msg"></h3>
 
-  <div class="card">
-    <h3>Leaderboard</h3>
-    <ol>
-      <li name="leaderboard">--</li>
-      <li name="leaderboard">--</li>
-      <li name="leaderboard">--</li>
-    </ol>
-  </div>
+  <p id="wins"></p>
+  <p id="avgScore"></p>
 
-</div>
+  <p id="fastest"></p>
+  <p id="avgTime"></p>
 
+  <ol>
+    <li name="leaderboard"></li>
+    <li name="leaderboard"></li>
+    <li name="leaderboard"></li>
+  </ol>
+
+  <script src="script.js"></script>
 </body>
 </html>

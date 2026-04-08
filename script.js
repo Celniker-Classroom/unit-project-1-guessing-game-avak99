@@ -1,45 +1,32 @@
-let answer = 0;
-let range = 3;
-let guesses = 0;
+// ================= STATE =================
+let answer;
+let range;
+let guessCount = 0;
 
 let wins = 0;
 let totalGuesses = 0;
+
 let scores = [];
 
+let startTime;
 let times = [];
-let startTime = 0;
 
-let playerName = "";
+let playerName = prompt("Enter your name:");
+playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
-const dateEl = document.getElementById("date");
-const msgEl = document.getElementById("msg");
-const guessInput = document.getElementById("guess");
 
+// ================= ELEMENTS =================
 const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
 
-const winsEl = document.getElementById("wins");
-const avgScoreEl = document.getElementById("avgScore");
-const fastestEl = document.getElementById("fastest");
-const avgTimeEl = document.getElementById("avgTime");
-
-const leaderboardEls = document.getElementsByName("leaderboard");
-
-const radios = document.querySelectorAll('input[name="level"]');
+playBtn.addEventListener("click", play);
+guessBtn.addEventListener("click", makeGuess);
+giveUpBtn.addEventListener("click", giveUp);
 
 
-// ---------- NAME ----------
-function formatName(name) {
-  if (!name) return "Player";
-  return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-}
-
-playerName = formatName(prompt("Enter your name:"));
-
-
-// ---------- DATE ----------
-function getDaySuffix(day) {
+// ================= DATE =================
+function getSuffix(day) {
   if (day >= 11 && day <= 13) return "th";
   if (day % 10 === 1) return "st";
   if (day % 10 === 2) return "nd";
@@ -48,158 +35,135 @@ function getDaySuffix(day) {
 }
 
 function time() {
-  const now = new Date();
+  let now = new Date();
 
-  const months = [
+  let months = [
     "January","February","March","April","May","June",
     "July","August","September","October","November","December"
   ];
 
-  const month = months[now.getMonth()];
-  const day = now.getDate();
-  const suffix = getDaySuffix(day);
-  const year = now.getFullYear();
+  let day = now.getDate();
+  let suffix = getSuffix(day);
 
-  const hours = now.getHours();
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-  const seconds = String(now.getSeconds()).padStart(2, "0");
-
-  return `${month} ${day}${suffix}, ${year} ${hours}:${minutes}:${seconds}`;
+  return `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()} ${now.toLocaleTimeString()}`;
 }
 
 setInterval(() => {
-  dateEl.textContent = time();
+  document.getElementById("date").textContent = time();
 }, 1000);
 
 
-// ---------- RANGE ----------
-function getRange() {
-  if (document.getElementById("e").checked) return 3;
-  if (document.getElementById("m").checked) return 10;
-  if (document.getElementById("h").checked) return 100;
-  return 10;
-}
-
-
-// ---------- PLAY ----------
+// ================= PLAY =================
 function play() {
-  range = getRange();
+  let selected = document.querySelector('input[name="level"]:checked');
+  range = parseInt(selected.value);
+
   answer = Math.floor(Math.random() * range) + 1;
 
-  guesses = 0;
+  guessCount = 0;
   startTime = new Date().getTime();
 
-  msgEl.textContent = `${playerName}, guess a number between 1 and ${range}`;
+  document.getElementById("msg").textContent =
+    `${playerName}, start guessing! Range: 1 - ${range}`;
 
-  guessInput.disabled = false;
   guessBtn.disabled = false;
   giveUpBtn.disabled = false;
   playBtn.disabled = true;
-
-  radios.forEach(r => r.disabled = true);
 }
 
 
-// ---------- GUESS ----------
+// ================= GUESS =================
 function makeGuess() {
-  const guess = Number(guessInput.value);
+  let guess = parseInt(document.getElementById("guess").value);
+  guessCount++;
 
-  if (!guess || guess < 1 || guess > range) {
-    msgEl.textContent = `Enter a number between 1 and ${range}`;
-    return;
-  }
+  let msg = "";
 
-  guesses++;
-
-  const diff = Math.abs(guess - answer);
-
-  let proximity = "";
-  if (diff <= 2) proximity = "hot";
-  else if (diff <= 5) proximity = "warm";
-  else proximity = "cold";
-
-  if (guess === answer) {
-    msgEl.textContent = `${playerName}, correct! You got it in ${guesses} guesses (${proximity})`;
-    endRound();
-    updateScore(guesses);
-    updateTimers();
+  if (guess > answer) {
+    msg = "Too high";
+  } else if (guess < answer) {
+    msg = "Too low";
   } else {
-    let highLow = guess > answer ? "high" : "low";
-    msgEl.textContent = `Too ${highLow} (${proximity})`;
+    msg = "Correct";
+
+    guessBtn.disabled = true;
+
+    wins++;
+    totalGuesses += guessCount;
+
+    document.getElementById("wins").textContent = wins;
+    document.getElementById("avgScore").textContent =
+      (totalGuesses / wins).toFixed(0);
+
+    updateLeaderboard(guessCount);
+    updateTimers(new Date().getTime());
+
+    reset();
   }
 
-  guessInput.value = "";
+  if (guess !== answer) {
+    let diff = Math.abs(guess - answer);
+
+    if (diff <= 2) msg += " Hot";
+    else if (diff <= 5) msg += " Warm";
+    else msg += " Cold";
+  }
+
+  document.getElementById("msg").textContent =
+    `${playerName}, ${msg}`;
 }
 
 
-// ---------- GIVE UP ----------
-function giveUp() {
-  msgEl.textContent = `${playerName}, the answer was ${answer}`;
-
-  updateScore(range);
-  updateTimers();
-  endRound();
-}
-
-
-// ---------- SCORE ----------
-function updateScore(score) {
-  wins++;
-  totalGuesses += score;
-
+// ================= LEADERBOARD =================
+function updateLeaderboard(score) {
   scores.push(score);
   scores.sort((a, b) => a - b);
 
-  winsEl.textContent = `Wins: ${wins}`;
-  avgScoreEl.textContent = `Average Score: ${(totalGuesses / wins).toFixed(2)}`;
+  let items = document.getElementsByName("leaderboard");
 
   for (let i = 0; i < 3; i++) {
-    leaderboardEls[i].textContent = scores[i] || "--";
+    items[i].textContent = scores[i] !== undefined ? scores[i] : "--";
   }
 }
 
 
-// ---------- TIMER ----------
-function updateTimers() {
-  const endTime = new Date().getTime();
-  const timeTaken = (endTime - startTime) / 1000;
+// ================= GIVE UP =================
+function giveUp() {
+  wins++;
+  totalGuesses += guessCount;
 
-  times.push(timeTaken);
+  document.getElementById("wins").textContent = wins;
+  document.getElementById("avgScore").textContent =
+    (totalGuesses / wins).toFixed(0);
 
-  const fastest = Math.min(...times);
-  const avg = times.reduce((a, b) => a + b) / times.length;
+  updateLeaderboard(range);
+  updateTimers(new Date().getTime());
 
-  fastestEl.textContent = `Fastest: ${fastest.toFixed(2)}s`;
-  avgTimeEl.textContent = `Average Time: ${avg.toFixed(2)}s`;
+  document.getElementById("msg").textContent =
+    `${playerName}, you gave up! The answer was ${answer}`;
+
+  guessBtn.disabled = true;
+  giveUpBtn.disabled = true;
+  playBtn.disabled = false;
 }
 
 
-// ---------- RESET ----------
+// ================= TIMER =================
+function updateTimers(endTime) {
+  let duration = (endTime - startTime) / 1000;
+  times.push(duration);
+
+  let fastest = Math.min(...times);
+  let avg = times.reduce((a, b) => a + b, 0) / times.length;
+
+  document.getElementById("fastest").textContent = fastest.toFixed(2);
+  document.getElementById("avgTime").textContent = avg.toFixed(2);
+}
+
+
+// ================= RESET =================
 function reset() {
   playBtn.disabled = false;
   guessBtn.disabled = true;
   giveUpBtn.disabled = true;
-  guessInput.disabled = true;
-
-  radios.forEach(r => r.disabled = false);
 }
-
-
-// ---------- END ROUND ----------
-function endRound() {
-  reset();
-}
-
-
-// ---------- EVENTS ----------
-playBtn.addEventListener("click", play);
-guessBtn.addEventListener("click", makeGuess);
-giveUpBtn.addEventListener("click", giveUp);
-
-guessInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") makeGuess();
-});
-
-document.getElementById("darkModeToggle").addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-});
