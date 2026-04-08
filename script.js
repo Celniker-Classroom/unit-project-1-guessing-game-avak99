@@ -20,9 +20,16 @@ const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
 
+const guessInput = document.getElementById("guess");
+const radios = document.querySelectorAll('input[name="level"]');
+
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
+
+// initial state
+guessBtn.disabled = true;
+giveUpBtn.disabled = true;
 
 
 // ================= DATE =================
@@ -56,7 +63,6 @@ function time() {
   return `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()} ${hours}:${minutes}:${seconds} ${ampm}`;
 }
 
-// update every second + initial render
 setInterval(() => {
   document.getElementById("date").textContent = time();
 }, 1000);
@@ -80,12 +86,14 @@ function play() {
   guessBtn.disabled = false;
   giveUpBtn.disabled = false;
   playBtn.disabled = true;
+
+  radios.forEach(r => r.disabled = true);
 }
 
 
 // ================= GUESS =================
 function makeGuess() {
-  let guess = parseInt(document.getElementById("guess").value);
+  let guess = parseInt(guessInput.value);
   guessCount++;
 
   let msg = "";
@@ -102,11 +110,7 @@ function makeGuess() {
     wins++;
     totalGuesses += guessCount;
 
-    document.getElementById("wins").textContent = wins;
-    document.getElementById("avgScore").textContent =
-      (totalGuesses / wins).toFixed(0);
-
-    updateLeaderboard(guessCount);
+    updateScore(guessCount);
     updateTimers(new Date().getTime());
 
     reset();
@@ -122,11 +126,17 @@ function makeGuess() {
 
   document.getElementById("msg").textContent =
     `${playerName}, ${msg}`;
+
+  guessInput.value = "";
 }
 
 
-// ================= LEADERBOARD =================
-function updateLeaderboard(score) {
+// ================= SCORE =================
+function updateScore(score) {
+  document.getElementById("wins").textContent = wins;
+  document.getElementById("avgScore").textContent =
+    (totalGuesses / wins).toFixed(0);
+
   scores.push(score);
   scores.sort((a, b) => a - b);
 
@@ -141,13 +151,9 @@ function updateLeaderboard(score) {
 // ================= GIVE UP =================
 function giveUp() {
   wins++;
-  totalGuesses += guessCount;
+  totalGuesses += range;
 
-  document.getElementById("wins").textContent = wins;
-  document.getElementById("avgScore").textContent =
-    (totalGuesses / wins).toFixed(0);
-
-  updateLeaderboard(range);
+  updateScore(range);
   updateTimers(new Date().getTime());
 
   document.getElementById("msg").textContent =
@@ -156,6 +162,8 @@ function giveUp() {
   guessBtn.disabled = true;
   giveUpBtn.disabled = true;
   playBtn.disabled = false;
+
+  reset();
 }
 
 
@@ -177,4 +185,6 @@ function reset() {
   playBtn.disabled = false;
   guessBtn.disabled = true;
   giveUpBtn.disabled = true;
+
+  radios.forEach(r => r.disabled = false);
 }
