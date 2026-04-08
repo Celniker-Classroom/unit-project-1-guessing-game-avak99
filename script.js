@@ -1,4 +1,3 @@
-// add javascript here
 // ==================== VARIABLES ====================
 let playerName = prompt("Enter your name:");
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
@@ -24,6 +23,9 @@ const avgScoreEl = document.getElementById("avgScore");
 const fastestEl = document.getElementById("fastest");
 const avgTimeEl = document.getElementById("avgTime");
 const leaderboardEls = document.getElementsByName("leaderboard");
+
+// ✅ NEW: difficulty inputs
+const diffInputs = document.querySelectorAll('input[name="difficulty"]');
 
 // ==================== DATE & TIME ====================
 function time() {
@@ -68,6 +70,9 @@ function play() {
   playBtn.disabled = true;
   startTime = new Date().getTime();
   msgEl.textContent = `${playerName}, guess a number between 1 and ${range}`;
+
+  // ✅ lock difficulty during round
+  diffInputs.forEach(input => input.disabled = true);
 }
 
 function makeGuess() {
@@ -100,6 +105,7 @@ function giveUp() {
 
 function endRound() {
   playBtn.disabled = false;
+
   // Update scores & stats
   wins++;
   totalGuesses += guesses;
@@ -115,15 +121,17 @@ function endRound() {
 
   // Update timers
   const endTime = new Date().getTime();
-  const roundTime = (endTime - startTime) / 1000; // in seconds
+  const roundTime = (endTime - startTime) / 1000;
   times.push(roundTime);
   fastestTime = fastestTime === null ? roundTime : Math.min(fastestTime, roundTime);
 
   fastestEl.textContent = `Fastest Game: ${fastestTime.toFixed(2)}s`;
   const avgTime = times.reduce((a,b)=>a+b,0)/times.length;
   avgTimeEl.textContent = `Average Time: ${avgTime.toFixed(2)}s`;
-}
 
+  // ✅ unlock difficulty after round
+  diffInputs.forEach(input => input.disabled = false);
+}
 
 // ==================== EVENT LISTENERS ====================
 playBtn.addEventListener("click", play);
