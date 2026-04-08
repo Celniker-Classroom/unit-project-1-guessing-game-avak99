@@ -1,45 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Guessing Game</title>
+  <title>Number Guessing Game</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 
 <body>
 
-<p id="date"></p>
+<div class="container">
 
-<h3>Level</h3>
-<input type="radio" name="level" id="e" value="3" checked> Easy
-<input type="radio" name="level" id="m" value="10"> Medium
-<input type="radio" name="level" id="h" value="100"> Hard
+  <h1 class="title">Number Guessing Game</h1>
 
-<br><br>
-<input type="number" id="customRange" placeholder="Custom max number">
+  <p id="date"></p>
 
-<br><br>
-<button id="playBtn">Play</button>
-<button id="darkModeToggle">Toggle Dark Mode</button>
+  <div class="card">
+    <h3>Level</h3>
+    <input type="radio" name="level" id="e" value="3" checked> Easy
+    <input type="radio" name="level" id="m" value="10"> Medium
+    <input type="radio" name="level" id="h" value="100"> Hard
+  </div>
 
-<h3 id="msg">Select a level</h3>
+  <div class="card">
+    <input type="number" id="customRange" placeholder="Custom max number">
+  </div>
 
-<input type="text" id="guess">
-<button id="guessBtn" disabled>Guess</button>
-<button id="giveUpBtn" disabled>Give Up</button>
+  <div class="card">
+    <button id="playBtn">Play</button>
+    <button id="darkModeToggle">Toggle Dark Mode</button>
+  </div>
 
-<h3>Stats</h3>
-<p id="wins">Wins: 0</p>
-<p id="avgScore">Average Score:</p>
-<p id="fastest">Fastest:</p>
-<p id="avgTime">Average Time:</p>
+  <h2 id="msg">Select a level</h2>
 
-<h3>Leaderboard</h3>
-<ol>
-  <li name="leaderboard">--</li>
-  <li name="leaderboard">--</li>
-  <li name="leaderboard">--</li>
-</ol>
+  <div class="card">
+    <input type="text" id="guess">
+    <button id="guessBtn" disabled>Guess</button>
+    <button id="giveUpBtn" disabled>Give Up</button>
+  </div>
+
+  <div class="card">
+    <h3>Stats</h3>
+    <p id="wins">Wins: 0</p>
+    <p id="avgScore">Average Score:</p>
+    <p id="fastest">Fastest:</p>
+    <p id="avgTime">Average Time:</p>
+  </div>
+
+  <div class="card">
+    <h3>Leaderboard</h3>
+    <ol>
+      <li name="leaderboard">--</li>
+      <li name="leaderboard">--</li>
+      <li name="leaderboard">--</li>
+    </ol>
+  </div>
+
+</div>
 
 </body>
 </html>

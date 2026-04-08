@@ -45,12 +45,17 @@ function time() {
 setInterval(() => dateEl.textContent = time(), 1000);
 
 function getRange() {
+  const custom = document.getElementById("customRange").value;
+
+  if (custom !== "" && Number(custom) > 0) {
+    return Number(custom);
+  }
+
   if (document.getElementById("e").checked) return 3;
   if (document.getElementById("m").checked) return 10;
   if (document.getElementById("h").checked) return 100;
 
-  const custom = Number(document.getElementById("customRange").value);
-  return custom > 0 ? custom : 10;
+  return 10;
 }
 
 function play() {
@@ -67,6 +72,7 @@ function play() {
   diffInputs.forEach(i => i.disabled = true);
 
   startTime = new Date().getTime();
+
   msgEl.textContent = `${playerName}, guess a number between 1 and ${range}`;
 }
 
