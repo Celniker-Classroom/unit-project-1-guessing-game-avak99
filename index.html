@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>JavaScript Number Guessing Game</title>
-    <script src="script.js" defer></script>
+<head>
+  <title>Guessing Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
 
-    <style>
-      body.dark {
-        background-color: #121212;
-        color: white;
-      }
-    </style>
-  </head>
+<body>
 
-  <body>
-    <p id="date"></p>
+<p id="date"></p>
 
-    <h3>Level</h3>
-    <input type="radio" name="difficulty" id="e" value="3" checked>
-    <label for="e">Easy</label>
+<h3>Level</h3>
+<input type="radio" name="level" id="e" value="3" checked> Easy
+<input type="radio" name="level" id="m" value="10"> Medium
+<input type="radio" name="level" id="h" value="100"> Hard
 
-    <input type="radio" name="difficulty" id="m" value="10">
-    <label for="m">Medium</label>
+<br><br>
+<input type="number" id="customRange" placeholder="Custom max number">
 
-    <input type="radio" name="difficulty" id="h" value="100">
-    <label for="h">Hard</label>
+<br><br>
+<button id="playBtn">Play</button>
+<button id="darkModeToggle">Toggle Dark Mode</button>
 
-    <br><br>
-    <input type="number" id="customRange" placeholder="Custom max number">
+<h3 id="msg">Select a level</h3>
 
-    <br><br>
-    <button id="playBtn">Play</button>
+<input type="text" id="guess">
+<button id="guessBtn" disabled>Guess</button>
+<button id="giveUpBtn" disabled>Give Up</button>
 
-    <button id="darkModeToggle">Toggle Dark Mode</button>
+<h3>Stats</h3>
+<p id="wins">Wins: 0</p>
+<p id="avgScore">Average Score:</p>
+<p id="fastest">Fastest:</p>
+<p id="avgTime">Average Time:</p>
 
-    <h3 id="msg">Select a Level</h3>
+<h3>Leaderboard</h3>
+<ol>
+  <li name="leaderboard">--</li>
+  <li name="leaderboard">--</li>
+  <li name="leaderboard">--</li>
+</ol>
 
-    <input type="text" id="guess">
-    <button id="guessBtn" disabled>Guess</button>
-    <button id="giveUpBtn" disabled>Give Up</button>
-
-    <h3>Stats</h3>
-    <p id="wins">Total wins: 0</p>
-    <p id="avgScore">Average Score: </p>
-    <p id="fastest">Fastest Game: </p>
-    <p id="avgTime">Average Time: </p>
-
-    <h3>Leaderboard</h3>
-    <ol>
-      <li name="leaderboard">--</li>
-      <li name="leaderboard">--</li>
-      <li name="leaderboard">--</li>
-    </ol>
-  </body>
+</body>
 </html>
