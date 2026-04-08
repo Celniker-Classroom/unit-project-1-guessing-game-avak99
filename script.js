@@ -45,12 +45,23 @@ function time() {
   let day = now.getDate();
   let suffix = getSuffix(day);
 
-  return `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()} ${now.toLocaleTimeString()}`;
+  let hours = now.getHours();
+  let minutes = String(now.getMinutes()).padStart(2, "0");
+  let seconds = String(now.getSeconds()).padStart(2, "0");
+
+  let ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+
+  return `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()} ${hours}:${minutes}:${seconds} ${ampm}`;
 }
 
+// update every second + initial render
 setInterval(() => {
   document.getElementById("date").textContent = time();
 }, 1000);
+
+document.getElementById("date").textContent = time();
 
 
 // ================= PLAY =================
