@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Number Guessing Game</title>
+  <title>Pink Guessing Game</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
@@ -10,30 +10,31 @@
 
 <div class="container">
 
-  <h1 class="title">Number Guessing Game</h1>
+  <h1 class="title">Guessing Game</h1>
 
   <p id="date"></p>
 
   <div class="card">
-    <h3>Level</h3>
-    <input type="radio" name="level" id="e" value="3" checked> Easy
-    <input type="radio" name="level" id="m" value="10"> Medium
-    <input type="radio" name="level" id="h" value="100"> Hard
+    <h3>Select Level</h3>
+
+    <label><input type="radio" name="level" value="3" id="easy" checked> Easy</label>
+    <label><input type="radio" name="level" value="10" id="medium"> Medium</label>
+    <label><input type="radio" name="level" value="100" id="hard"> Hard</label>
+    <label><input type="radio" name="level" value="custom" id="custom"> Custom</label>
+
+    <br><br>
+
+    <input type="number" id="customRange" placeholder="Enter max number" disabled>
   </div>
 
-  <div class="card">
-    <input type="number" id="customRange" placeholder="Custom max number">
-  </div>
+  <button id="playBtn">Play</button>
+  <button id="darkModeToggle">Toggle Dark Mode</button>
+
+  <h3 id="msg">Select a level and press play</h3>
 
   <div class="card">
-    <button id="playBtn">Play</button>
-    <button id="darkModeToggle">Toggle Dark Mode</button>
-  </div>
-
-  <h2 id="msg">Select a level</h2>
-
-  <div class="card">
-    <input type="text" id="guess">
+    <input type="number" id="guess" placeholder="Enter guess" disabled>
+    <br>
     <button id="guessBtn" disabled>Guess</button>
     <button id="giveUpBtn" disabled>Give Up</button>
   </div>

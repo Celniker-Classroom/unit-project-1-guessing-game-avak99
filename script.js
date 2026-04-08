@@ -1,16 +1,12 @@
-let playerName = prompt("Enter your name:");
-playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
-
 let answer = 0;
 let range = 3;
 let guesses = 0;
 let wins = 0;
 let totalGuesses = 0;
 let scores = [];
-let startTime = 0;
 let times = [];
+let startTime = 0;
 let fastestTime = null;
-let streak = 0;
 let totalGames = 0;
 
 const dateEl = document.getElementById("date");
@@ -24,36 +20,37 @@ const avgScoreEl = document.getElementById("avgScore");
 const fastestEl = document.getElementById("fastest");
 const avgTimeEl = document.getElementById("avgTime");
 const leaderboardEls = document.getElementsByName("leaderboard");
-const diffInputs = document.querySelectorAll('input[name="level"]');
+
+const radios = document.querySelectorAll('input[name="level"]');
+const customInput = document.getElementById("customRange");
 const darkToggle = document.getElementById("darkModeToggle");
 
-function getSuffix(day) {
-  if (day >= 11 && day <= 13) return "th";
-  if (day % 10 === 1) return "st";
-  if (day % 10 === 2) return "nd";
-  if (day % 10 === 3) return "rd";
-  return "th";
-}
-
-function time() {
+function updateDate() {
   const now = new Date();
-  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  let day = now.getDate();
-  return `${months[now.getMonth()]} ${day}${getSuffix(day)}, ${now.getFullYear()} ${now.toLocaleTimeString()}`;
+  dateEl.textContent = now.toLocaleString();
 }
+setInterval(updateDate, 1000);
+updateDate();
 
-setInterval(() => dateEl.textContent = time(), 1000);
+radios.forEach(radio => {
+  radio.addEventListener("change", () => {
+    if (document.getElementById("custom").checked) {
+      customInput.disabled = false;
+    } else {
+      customInput.disabled = true;
+    }
+  });
+});
 
 function getRange() {
-  const custom = document.getElementById("customRange").value;
+  if (document.getElementById("easy").checked) return 3;
+  if (document.getElementById("medium").checked) return 10;
+  if (document.getElementById("hard").checked) return 100;
 
-  if (custom !== "" && Number(custom) > 0) {
-    return Number(custom);
+  if (document.getElementById("custom").checked) {
+    const val = Number(customInput.value);
+    return val > 0 ? val : 10;
   }
-
-  if (document.getElementById("e").checked) return 3;
-  if (document.getElementById("m").checked) return 10;
-  if (document.getElementById("h").checked) return 100;
 
   return 10;
 }
@@ -69,102 +66,90 @@ function play() {
   giveUpBtn.disabled = false;
   playBtn.disabled = true;
 
-  diffInputs.forEach(i => i.disabled = true);
+  radios.forEach(r => r.disabled = true);
+  customInput.disabled = true;
 
   startTime = new Date().getTime();
 
-  msgEl.textContent = `${playerName}, guess a number between 1 and ${range}`;
+  msgEl.textContent = `Guess a number between 1 and ${range}`;
 }
 
 function makeGuess() {
   const guess = Number(guessInput.value);
 
-  if (isNaN(guess)) {
-    msgEl.textContent = "Enter a number";
-    return;
-  }
-
-  if (guess < 1 || guess > range) {
-    msgEl.textContent = `Stay between 1 and ${range}`;
+  if (!guess || guess < 1 || guess > range) {
+    msgEl.textContent = `Enter a number between 1 and ${range}`;
     return;
   }
 
   guesses++;
 
   if (guess === answer) {
-    let quality = "Needs work";
-    if (guesses <= 2) quality = "Amazing!";
-    else if (guesses <= 5) quality = "Good";
+    msgEl.textContent = "Correct!";
 
-    msgEl.textContent = `Correct ${playerName}! ${quality}`;
+    playSound();
 
-    new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3").play();
-
-    msgEl.classList.add("pop");
-    setTimeout(() => msgEl.classList.remove("pop"), 300);
-
-    streak++;
-    updateScore(guesses);
-    updateTimers(new Date().getTime());
-    reset();
-
+    updateStats(guesses);
+    endRound();
   } else {
-    let feedback = guess > answer ? "high" : "low";
-    let diff = Math.abs(guess - answer);
+    const diff = Math.abs(guess - answer);
 
     let temp = "cold";
     if (diff <= 2) temp = "hot";
     else if (diff <= 5) temp = "warm";
 
-    msgEl.textContent = `Too ${feedback} (${temp})`;
-    streak = 0;
+    msgEl.textContent = guess > answer ? `Too high (${temp})` : `Too low (${temp})`;
   }
 
   guessInput.value = "";
 }
 
-function giveUp() {
-  msgEl.textContent = `You gave up. Answer was ${answer}`;
-  streak = 0;
-
-  updateScore(range);
-  updateTimers(new Date().getTime());
-  reset();
+function playSound() {
+  const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+  audio.play();
 }
 
-function updateScore(score) {
+function giveUp() {
+  msgEl.textContent = `The answer was ${answer}`;
+  endRound();
+}
+
+function updateStats(score) {
   wins++;
   totalGuesses += score;
 
   scores.push(score);
-  scores.sort((a,b)=>a-b);
+  scores.sort((a, b) => a - b);
 
-  winsEl.textContent = `Wins: ${wins} | Streak: ${streak} | Win %: ${((wins/totalGames)*100).toFixed(1)}%`;
+  winsEl.textContent = `Wins: ${wins}`;
   avgScoreEl.textContent = `Average Score: ${(totalGuesses / wins).toFixed(2)}`;
 
-  for (let i = 0; i < 3; i++) {
-    leaderboardEls[i].textContent = scores[i] || "--";
-  }
-}
+  scores.slice(0, 3).forEach((s, i) => {
+    leaderboardEls[i].textContent = s;
+  });
 
-function updateTimers(endMs) {
-  let timeTaken = (endMs - startTime) / 1000;
+  const endTime = new Date().getTime();
+  const timeTaken = (endTime - startTime) / 1000;
+
   times.push(timeTaken);
-
   fastestTime = fastestTime === null ? timeTaken : Math.min(fastestTime, timeTaken);
 
-  fastestEl.textContent = `Fastest: ${fastestTime.toFixed(2)}`;
-  avgTimeEl.textContent = `Average Time: ${(times.reduce((a,b)=>a+b)/times.length).toFixed(2)}`;
+  fastestEl.textContent = `Fastest: ${fastestTime.toFixed(2)}s`;
+  avgTimeEl.textContent = `Average Time: ${(times.reduce((a,b)=>a+b)/times.length).toFixed(2)}s`;
 }
 
-function reset() {
+function endRound() {
   playBtn.disabled = false;
   guessBtn.disabled = true;
   giveUpBtn.disabled = true;
   guessInput.disabled = true;
 
-  diffInputs.forEach(i => i.disabled = false);
+  radios.forEach(r => r.disabled = false);
 }
+
+playBtn.addEventListener("click", play);
+guessBtn.addEventListener("click", makeGuess);
+giveUpBtn.addEventListener("click", giveUp);
 
 darkToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
@@ -173,7 +158,3 @@ darkToggle.addEventListener("click", () => {
 guessInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") makeGuess();
 });
-
-playBtn.addEventListener("click", play);
-guessBtn.addEventListener("click", makeGuess);
-giveUpBtn.addEventListener("click", giveUp);
