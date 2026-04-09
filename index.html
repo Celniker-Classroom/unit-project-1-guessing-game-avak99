@@ -1,54 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Number Guessing Game</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+ <title>Guessing Game</title>
+ <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+ <div class="container">
 
-  <p id="date"></p>
+   <!-- DATE -->
+   <p id="date" class="date"></p>
 
-  <h1 class="title">Guessing Game</h1>
+   <h1 class="title"> ⭐Guessing Game⭐</h1>
 
-  <h3>Difficulty</h3>
-  <input type="radio" name="level" value="3" checked> Easy
-  <input type="radio" name="level" value="10"> Medium
-  <input type="radio" name="level" value="20"> Hard
+   <!-- DIFFICULTY (CUSTOM REMOVED) -->
+   <div class="levels">
+     <label><input type="radio" name="level" id="e" value="3"> Easy</label>
+     <label><input type="radio" name="level" id="m" value="10"> Medium</label>
+     <label><input type="radio" name="level" id="h" value="100"> Hard</label>
+   </div>
 
-  <div>
-    <label>Custom Range:</label>
-    <input type="number" id="customRange" placeholder="Enter max number">
-  </div>
+   <!-- CONTROLS -->
+   <div class="buttons">
+     <button id="playBtn">Play</button>
+     <button id="guessBtn">Guess</button>
+     <button id="giveUpBtn">Give Up</button>
+   </div>
 
-  <br>
+   <input id="guess" type="number" placeholder="Enter your guess">
 
-  <button onclick="play()">Play</button>
+   <!-- TIMER -->
+   <p id="timer">Time: 0s</p>
 
-  <p id="msg"></p>
+   <!-- MESSAGE -->
+   <h3 id="msg"></h3>
 
-  <p id="timer">Timer: 0s</p>
+   <!-- STATS -->
+   <div class="stats">
+     <p>Wins: <span id="wins"></span></p>
+     <p>Avg Score: <span id="avgScore"></span></p>
+     <p>Fastest Time: <span id="fastest"></span></p>
+     <p>Avg Time: <span id="avgTime"></span></p>
+   </div>
 
-  <input type="number" id="guess" placeholder="Enter guess">
-  <button onclick="makeGuess()" disabled id="guessBtn">Guess</button>
-  <button onclick="giveUp()" disabled id="giveUpBtn">Give Up</button>
+   <!-- LEADERBOARD -->
+   <div class="leaderboard">
+     <h3> Leaderboard</h3>
+     <ol>
+       <li name="leaderboard"></li>
+       <li name="leaderboard"></li>
+       <li name="leaderboard"></li>
+     </ol>
+   </div>
 
-  <h3>Stats</h3>
-  <p id="wins">Total wins: 0</p>
-  <p id="streak">Current Streak: 0</p>
-  <p id="winPercent">Win %: 0%</p>
-  <p id="avgScore">Average Score: 0</p>
-  <p id="fastest">Fastest: --</p>
-  <p id="avgTime">Average Time: --</p>
+ </div>
 
-  <h3>Leaderboard</h3>
-  <p class="leaderboard">--</p>
-  <p class="leaderboard">--</p>
-  <p class="leaderboard">--</p>
-
+ <script src="script.js"></script>
 </body>
 </html>
