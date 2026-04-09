@@ -40,9 +40,10 @@ function playBeep(frequency = 800, duration = 200) {
 }
 
 
-let playerName = prompt("Enter your name:");
+let playerName = prompt("Enter your name:") || "Player";
+playerName = playerName.trim();
+if (!playerName) playerName = "Player";
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
-
 
 const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
@@ -74,6 +75,12 @@ guessInput.addEventListener("keydown", function(event) {
 
 guessBtn.disabled = true;
 giveUpBtn.disabled = true;
+
+document.getElementById("wins").textContent = wins;
+document.getElementById("avgScore").textContent = "--";
+document.getElementById("fastest").textContent = "--";
+document.getElementById("avgTime").textContent = "--";
+document.getElementById("streak").textContent = streak;
 
 
 
@@ -188,29 +195,23 @@ function makeGuess() {
    wins++;
    totalGuesses += guessCount;
 
-   // Score quality feedback
-   let quality = "";
-   if (guessCount === 1) quality = "Amazing!";
-   else if (guessCount <= 3) quality = "Great!";
-   else if (guessCount <= 5) quality = "Good!";
-   else quality = "Keep trying!";
+   let quality = "You win! Great job!";
+   if (guessCount === 1) quality = "You win! Amazing!";
+   else if (guessCount <= 3) quality = "You win! Great job!";
+   else if (guessCount <= 5) quality = "You win! Good job!";
+   else quality = "You win! Nice work!";
+
+   document.getElementById("msg").textContent =
+     `${playerName}, ${msg}! ${quality}`;
 
    updateScore(guessCount);
    updateTimers(new Date().getTime());
-
    reset();
- }
 
-
- document.getElementById("msg").textContent =
-   `${playerName}, ${msg}${guess === answer ? ` ${quality}` : ""}`;
- 
- if (guess === answer) {
    document.getElementById("msg").classList.add("success");
    setTimeout(() => document.getElementById("msg").classList.remove("success"), 1000);
    playBeep(800, 300); // Win sound
  }
-
 
  guessInput.value = "";
 }
@@ -222,8 +223,7 @@ function makeGuess() {
 function updateScore(score) {
  document.getElementById("wins").textContent = wins;
  document.getElementById("avgScore").textContent =
-   (totalGuesses / wins).toFixed(0);
-
+   wins > 0 ? (totalGuesses / wins).toFixed(0) : "--";
 
  scores.push(score);
  scores.sort((a, b) => a - b);
@@ -246,23 +246,16 @@ function updateScore(score) {
 // ================= GIVE UP =================
 function giveUp() {
  streak = 0; // Reset streak on give up
- 
- wins++;
- totalGuesses += range;
-
 
  updateScore(range);
  updateTimers(new Date().getTime());
 
-
  document.getElementById("msg").textContent =
    `${playerName}, you gave up! The answer was ${answer}`;
-
 
  guessBtn.disabled = true;
  giveUpBtn.disabled = true;
  playBtn.disabled = false;
-
 
  reset();
 }
