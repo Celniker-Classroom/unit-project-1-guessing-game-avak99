@@ -13,6 +13,33 @@ let startTime;
 let times = [];
 
 
+let streak = 0; // Above and beyond: streak tracking
+
+
+// Above and beyond: sound effects
+function playBeep(frequency = 800, duration = 200) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = frequency;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration / 1000);
+  } catch (e) {
+    // Fallback if audio not supported
+  }
+}
+
+
 let playerName = prompt("Enter your name:");
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
@@ -20,6 +47,7 @@ playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCas
 const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
+const darkModeBtn = document.getElementById("darkModeBtn");
 
 
 const guessInput = document.getElementById("guess");
@@ -29,6 +57,19 @@ const radios = document.querySelectorAll('input[name="level"]');
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
+
+// Dark mode toggle
+darkModeBtn.addEventListener("click", function() {
+  document.body.classList.toggle("dark-mode");
+  darkModeBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+});
+
+// Keyboard support: Enter key to guess
+guessInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter" && !guessBtn.disabled) {
+    makeGuess();
+  }
+});
 
 
 guessBtn.disabled = true;
@@ -115,6 +156,19 @@ function play() {
 // ================= GUESS =================
 function makeGuess() {
  let guess = parseInt(guessInput.value);
+ 
+ // Input validation
+ if (isNaN(guess)) {
+   document.getElementById("msg").textContent = `${playerName}, please enter a valid number!`;
+   guessInput.value = "";
+   return;
+ }
+ if (guess < 1 || guess > range) {
+   document.getElementById("msg").textContent = `${playerName}, guess must be between 1 and ${range}!`;
+   guessInput.value = "";
+   return;
+ }
+ 
  guessCount++;
 
 
@@ -134,21 +188,33 @@ function makeGuess() {
  } else {
    guessBtn.disabled = true;
 
+   streak++; // Increment streak on win
 
    wins++;
    totalGuesses += guessCount;
 
+   // Score quality feedback
+   let quality = "";
+   if (guessCount === 1) quality = "Amazing!";
+   else if (guessCount <= 3) quality = "Great!";
+   else if (guessCount <= 5) quality = "Good!";
+   else quality = "Keep trying!";
 
    updateScore(guessCount);
    updateTimers(new Date().getTime());
-
 
    reset();
  }
 
 
  document.getElementById("msg").textContent =
-   `${playerName}, ${msg}`;
+   `${playerName}, ${msg}${guess === answer ? ` ${quality}` : ""}`;
+ 
+ if (guess === answer) {
+   document.getElementById("msg").classList.add("success");
+   setTimeout(() => document.getElementById("msg").classList.remove("success"), 1000);
+   playBeep(800, 300); // Win sound
+ }
 
 
  guessInput.value = "";
@@ -174,6 +240,9 @@ function updateScore(score) {
  for (let i = 0; i < 3; i++) {
    items[i].textContent = scores[i] !== undefined ? scores[i] : "--";
  }
+ 
+ // Update streak display
+ document.getElementById("streak").textContent = streak;
 }
 
 
@@ -181,6 +250,8 @@ function updateScore(score) {
 
 // ================= GIVE UP =================
 function giveUp() {
+ streak = 0; // Reset streak on give up
+ 
  wins++;
  totalGuesses += range;
 

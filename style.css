@@ -179,3 +179,68 @@ ol {
     0 0 8px rgba(255, 182, 193, 0.5),
     0 0 2px rgba(0,0,0,0.1);
 }
+
+/* Dark Mode */
+.dark-mode {
+  background: linear-gradient(135deg, #2c1810, #1a0f0a, #3d1f14, #2a1410);
+  color: #f5e6d3;
+}
+
+.dark-mode .container {
+  background: rgba(45, 25, 15, 0.9);
+  border: 1px solid rgba(139, 69, 19, 0.5);
+  box-shadow:
+    0 20px 50px rgba(139, 69, 19, 0.25),
+    inset 0 0 10px rgba(160, 82, 45, 0.3);
+}
+
+.dark-mode .title {
+  background: linear-gradient(45deg, #ff6b6b, #ffa500, #ff6b6b);
+  -webkit-text-fill-color: transparent;
+}
+
+.dark-mode .date {
+  color: #ffb366;
+}
+
+.dark-mode button {
+  background: linear-gradient(135deg, #ff6b6b, #ffa500);
+}
+
+.dark-mode button:hover {
+  background: linear-gradient(135deg, #ffa500, #ff6b6b);
+}
+
+.dark-mode input[type="number"] {
+  border-color: #ff6b6b;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f5e6d3;
+}
+
+.dark-mode .levels label:hover {
+  color: #ff6b6b;
+}
+
+.dark-mode .stats p {
+  color: #f5e6d3;
+}
+
+.dark-mode .leaderboard ol {
+  background: linear-gradient(135deg, #3d1f14, #2a1410);
+  border: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.dark-mode #msg {
+  color: #ffb366;
+}
+
+/* Animations */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+.success {
+  animation: bounce 1s ease;
+}
