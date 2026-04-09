@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background: linear-gradient(135deg, #74ebd5, #9face6);
+  background: linear-gradient(135deg, #f498cc7b, #eb9096);
   min-height: 100vh;
   margin: 0;
   padding: 20px;
@@ -15,7 +15,7 @@ body.dark {
 
 .title {
   font-size: 2.5rem;
-  background: linear-gradient(90deg, #ff8a00, #e52e71);
+  background: linear-gradient(90deg, #ff5100, #e01a63);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -26,7 +26,7 @@ button {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  background: #4CAF50;
+  background: #af4c66;
   color: white;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   transition: 0.3s;
@@ -34,7 +34,7 @@ button {
 
 button:hover {
   transform: scale(1.05);
-  background: #45a049;
+  background: #af4c66;
 }
 
 input {
@@ -46,7 +46,7 @@ input {
 }
 
 input:focus {
-  border-color: #4CAF50;
+  border-color: #af4c66;
   outline: none;
   box-shadow: 0 0 8px rgba(76,175,80,0.5);
 }
