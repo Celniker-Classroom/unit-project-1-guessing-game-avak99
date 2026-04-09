@@ -187,6 +187,8 @@ function makeGuess() {
    if (diff <= 2) msg += " Hot";
    else if (diff <= 5) msg += " Warm";
    else msg += " Cold";
+
+   document.getElementById("msg").textContent = `${playerName}, ${msg}`;
  } else {
    guessBtn.disabled = true;
 
@@ -246,6 +248,9 @@ function updateScore(score) {
 // ================= GIVE UP =================
 function giveUp() {
  streak = 0; // Reset streak on give up
+
+ wins++;
+ totalGuesses += range;
 
  updateScore(range);
  updateTimers(new Date().getTime());
