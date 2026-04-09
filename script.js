@@ -158,13 +158,8 @@ function makeGuess() {
  let guess = parseInt(guessInput.value);
  
  // Input validation
- if (isNaN(guess)) {
-   document.getElementById("msg").textContent = `${playerName}, please enter a valid number!`;
-   guessInput.value = "";
-   return;
- }
- if (guess < 1 || guess > range) {
-   document.getElementById("msg").textContent = `${playerName}, guess must be between 1 and ${range}!`;
+ if (isNaN(guess) || guess < 1 || guess > range) {
+   document.getElementById("msg").textContent = `${playerName}, please enter a number between 1 and ${range}!`;
    guessInput.value = "";
    return;
  }
