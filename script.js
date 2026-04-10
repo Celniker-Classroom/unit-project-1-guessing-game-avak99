@@ -12,7 +12,7 @@ let times = [];
 let streak = 0;
 
 
-// 🔊 ADDED: speech function (NEW ONLY)
+// 🔊 SPEECH
 function speak(text) {
   try {
     const msg = new SpeechSynthesisUtterance(text);
@@ -24,7 +24,7 @@ function speak(text) {
 }
 
 
-// sound
+// SOUND
 function playBeep(frequency = 800, duration = 200) {
 try {
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -46,7 +46,7 @@ try {
 }
 
 
-// confetti
+// CONFETTI
 function triggerConfetti() {
  const container = document.getElementById("confetti-container");
 
@@ -65,7 +65,7 @@ function triggerConfetti() {
 }
 
 
-// temp effects
+// TEMP EFFECTS
 function setTempEffect(diff) {
  document.body.classList.remove("cold", "warm", "hot");
 
@@ -75,11 +75,14 @@ function setTempEffect(diff) {
 }
 
 
+// PLAYER NAME
 let playerName = prompt("Enter your name:") || "Player";
 playerName = playerName.trim();
 if (!playerName) playerName = "Player";
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
+
+// ELEMENTS
 const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
@@ -88,6 +91,8 @@ const darkModeBtn = document.getElementById("darkModeBtn");
 const guessInput = document.getElementById("guess");
 const radios = document.querySelectorAll('input[name="level"]');
 
+
+// EVENTS
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
@@ -103,6 +108,8 @@ if (event.key === "Enter" && !guessBtn.disabled) {
 }
 });
 
+
+// INIT UI
 guessBtn.disabled = true;
 giveUpBtn.disabled = true;
 
@@ -113,7 +120,7 @@ document.getElementById("avgTime").textContent = "--";
 document.getElementById("streak").textContent = streak;
 
 
-// date
+// DATE
 function getSuffix(day) {
 if (day >= 11 && day <= 13) return "th";
 if (day % 10 === 1) return "st";
@@ -121,7 +128,6 @@ if (day % 10 === 2) return "nd";
 if (day % 10 === 3) return "rd";
 return "th";
 }
-
 
 function time() {
 let now = new Date();
@@ -151,11 +157,18 @@ document.getElementById("date").textContent = time();
 document.getElementById("date").textContent = time();
 
 
-// PLAY
+// PLAY (✅ FIXED HERE)
 function play() {
 let selected = document.querySelector('input[name="level"]:checked');
-range = parseInt(selected.value);
 
+// 🚨 FIX: prevent crash if no difficulty selected
+if (!selected) {
+ document.getElementById("msg").textContent =
+   `${playerName}, please select a difficulty first!`;
+ return;
+}
+
+range = parseInt(selected.value);
 answer = Math.floor(Math.random() * range) + 1;
 
 guessCount = 0;
@@ -179,6 +192,7 @@ guessInput.focus();
 // GUESS
 function makeGuess() {
 let guess = parseInt(guessInput.value);
+
 if (isNaN(guess) || guess < 1 || guess > range) {
  document.getElementById("msg").textContent =
  `${playerName}, please enter a number between 1 and ${range}!`;
@@ -190,7 +204,6 @@ guessCount++;
 
 let msg = "";
 
-// 🔊 ADDED SPEECH ONLY HERE
 if (guess > answer) {
  msg = "Too high";
  speak("Too high");
