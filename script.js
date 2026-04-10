@@ -12,7 +12,6 @@ let times = [];
 let streak = 0;
 
 
-// 🔊 SPEECH
 function speak(text) {
   try {
     const msg = new SpeechSynthesisUtterance(text);
@@ -24,7 +23,6 @@ function speak(text) {
 }
 
 
-// SOUND
 function playBeep(frequency = 800, duration = 200) {
 try {
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -46,7 +44,6 @@ try {
 }
 
 
-// CONFETTI
 function triggerConfetti() {
  const container = document.getElementById("confetti-container");
 
@@ -65,7 +62,6 @@ function triggerConfetti() {
 }
 
 
-// TEMP EFFECTS
 function setTempEffect(diff) {
  document.body.classList.remove("cold", "warm", "hot");
 
@@ -75,14 +71,12 @@ function setTempEffect(diff) {
 }
 
 
-// PLAYER NAME
 let playerName = prompt("Enter your name:") || "Player";
 playerName = playerName.trim();
 if (!playerName) playerName = "Player";
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
 
-// ELEMENTS
 const playBtn = document.getElementById("playBtn");
 const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
@@ -92,7 +86,6 @@ const guessInput = document.getElementById("guess");
 const radios = document.querySelectorAll('input[name="level"]');
 
 
-// EVENTS
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
@@ -109,7 +102,6 @@ if (event.key === "Enter" && !guessBtn.disabled) {
 });
 
 
-// INIT UI
 guessBtn.disabled = true;
 giveUpBtn.disabled = true;
 
@@ -120,7 +112,6 @@ document.getElementById("avgTime").textContent = "--";
 document.getElementById("streak").textContent = streak;
 
 
-// DATE
 function getSuffix(day) {
 if (day >= 11 && day <= 13) return "th";
 if (day % 10 === 1) return "st";
@@ -157,11 +148,9 @@ document.getElementById("date").textContent = time();
 document.getElementById("date").textContent = time();
 
 
-// PLAY (✅ FIXED HERE)
 function play() {
 let selected = document.querySelector('input[name="level"]:checked');
 
-// 🚨 FIX: prevent crash if no difficulty selected
 if (!selected) {
  document.getElementById("msg").textContent =
    `${playerName}, please select a difficulty first!`;
@@ -189,7 +178,6 @@ guessInput.focus();
 }
 
 
-// GUESS
 function makeGuess() {
 let guess = parseInt(guessInput.value);
 
@@ -260,7 +248,6 @@ guessInput.value = "";
 }
 
 
-// SCORE
 function updateScore(score) {
 document.getElementById("wins").textContent = wins;
 document.getElementById("avgScore").textContent =
@@ -279,7 +266,6 @@ document.getElementById("streak").textContent = streak;
 }
 
 
-// GIVE UP
 function giveUp() {
 streak = 0;
 
@@ -300,7 +286,6 @@ reset();
 }
 
 
-// TIMER
 function updateTimers(endTime) {
 let duration = (endTime - startTime) / 1000;
 times.push(duration);
@@ -313,7 +298,6 @@ document.getElementById("avgTime").textContent = avg.toFixed(2);
 }
 
 
-// RESET
 function reset() {
 playBtn.disabled = false;
 guessBtn.disabled = true;
