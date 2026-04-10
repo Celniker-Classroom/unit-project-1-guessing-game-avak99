@@ -1,20 +1,15 @@
-
 let answer;
 let range;
 let guessCount = 0;
 
-
 let wins = 0;
 let totalGuesses = 0;
-
 
 let scores = [];
 let startTime;
 let times = [];
 
-
 let streak = 0; // Above and beyond: streak tracking
-
 
 // Above and beyond: sound effects
 function playBeep(frequency = 800, duration = 200) {
@@ -34,11 +29,8 @@ function playBeep(frequency = 800, duration = 200) {
     
     oscillator.start(audioContext.currentTime);
     oscillator.stop(audioContext.currentTime + duration / 1000);
-  } catch (e) {
-    // Fallback if audio not supported
-  }
+  } catch (e) {}
 }
-
 
 let playerName = prompt("Enter your name:") || "Player";
 playerName = playerName.trim();
@@ -50,10 +42,8 @@ const guessBtn = document.getElementById("guessBtn");
 const giveUpBtn = document.getElementById("giveUpBtn");
 const darkModeBtn = document.getElementById("darkModeBtn");
 
-
 const guessInput = document.getElementById("guess");
 const radios = document.querySelectorAll('input[name="level"]');
-
 
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
@@ -65,13 +55,12 @@ darkModeBtn.addEventListener("click", function() {
   darkModeBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
 });
 
-// Keyboard support: Enter key to guess
+// Keyboard support
 guessInput.addEventListener("keydown", function(event) {
   if (event.key === "Enter" && !guessBtn.disabled) {
     makeGuess();
   }
 });
-
 
 guessBtn.disabled = true;
 giveUpBtn.disabled = true;
@@ -82,10 +71,7 @@ document.getElementById("fastest").textContent = "--";
 document.getElementById("avgTime").textContent = "--";
 document.getElementById("streak").textContent = streak;
 
-
-
-
-// ================= DATE =================
+// DATE
 function getSuffix(day) {
  if (day >= 11 && day <= 13) return "th";
  if (day % 10 === 1) return "st";
@@ -94,77 +80,59 @@ function getSuffix(day) {
  return "th";
 }
 
-
 function time() {
  let now = new Date();
-
 
  let months = [
    "January","February","March","April","May","June",
    "July","August","September","October","November","December"
  ];
 
-
  let day = now.getDate();
  let suffix = getSuffix(day);
-
 
  let hours = now.getHours();
  let minutes = String(now.getMinutes()).padStart(2, "0");
  let seconds = String(now.getSeconds()).padStart(2, "0");
 
-
  let ampm = hours >= 12 ? "PM" : "AM";
  hours = hours % 12 || 12;
 
-
  return `${months[now.getMonth()]} ${day}${suffix}, ${now.getFullYear()} ${hours}:${minutes}:${seconds} ${ampm}`;
 }
-
 
 setInterval(() => {
  document.getElementById("date").textContent = time();
 }, 1000);
 
-
 document.getElementById("date").textContent = time();
 
-
-
-
-// ================= PLAY =================
+// PLAY
 function play() {
  let selected = document.querySelector('input[name="level"]:checked');
  range = parseInt(selected.value);
 
-
  answer = Math.floor(Math.random() * range) + 1;
-
 
  guessCount = 0;
  startTime = new Date().getTime();
 
-
  document.getElementById("msg").textContent =
    `${playerName}, start guessing! Range: 1 - ${range}`;
-
 
  guessBtn.disabled = false;
  giveUpBtn.disabled = false;
  playBtn.disabled = true;
 
-
  radios.forEach(r => r.disabled = true);
+
+ guessInput.focus(); // ✅ THIS IS THE FIX
 }
 
-
-
-
-// ================= GUESS =================
+// GUESS
 function makeGuess() {
  let guess = parseInt(guessInput.value);
  
- // Input validation
  if (isNaN(guess) || guess < 1 || guess > range) {
    document.getElementById("msg").textContent = `${playerName}, please enter a number between 1 and ${range}!`;
    guessInput.value = "";
@@ -173,14 +141,11 @@ function makeGuess() {
  
  guessCount++;
 
-
  let msg = "";
-
 
  if (guess > answer) msg = "Too high";
  else if (guess < answer) msg = "Too low";
  else msg = "Correct";
-
 
  if (guess !== answer) {
    let diff = Math.abs(guess - answer);
@@ -192,7 +157,7 @@ function makeGuess() {
  } else {
    guessBtn.disabled = true;
 
-   streak++; // Increment streak on win
+   streak++;
 
    wins++;
    totalGuesses += guessCount;
@@ -212,16 +177,13 @@ function makeGuess() {
 
    document.getElementById("msg").classList.add("success");
    setTimeout(() => document.getElementById("msg").classList.remove("success"), 1000);
-   playBeep(800, 300); // Win sound
+   playBeep(800, 300);
  }
 
  guessInput.value = "";
 }
 
-
-
-
-// ================= SCORE =================
+// SCORE
 function updateScore(score) {
  document.getElementById("wins").textContent = wins;
  document.getElementById("avgScore").textContent =
@@ -230,24 +192,18 @@ function updateScore(score) {
  scores.push(score);
  scores.sort((a, b) => a - b);
 
-
  let items = document.getElementsByName("leaderboard");
-
 
  for (let i = 0; i < 3; i++) {
    items[i].textContent = scores[i] !== undefined ? scores[i] : "--";
  }
  
- // Update streak display
  document.getElementById("streak").textContent = streak;
 }
 
-
-
-
-// ================= GIVE UP =================
+// GIVE UP
 function giveUp() {
- streak = 0; // Reset streak on give up
+ streak = 0;
 
  wins++;
  totalGuesses += range;
@@ -265,32 +221,24 @@ function giveUp() {
  reset();
 }
 
-
-
-
-// ================= TIMER =================
+// TIMER
 function updateTimers(endTime) {
  let duration = (endTime - startTime) / 1000;
  times.push(duration);
 
-
  let fastest = Math.min(...times);
  let avg = times.reduce((a, b) => a + b, 0) / times.length;
-
 
  document.getElementById("fastest").textContent = fastest.toFixed(2);
  document.getElementById("avgTime").textContent = avg.toFixed(2);
 }
 
-
-
-
-// ================= RESET =================
+// RESET
 function reset() {
  playBtn.disabled = false;
  guessBtn.disabled = true;
  giveUpBtn.disabled = true;
 
-
  radios.forEach(r => r.disabled = false);
 }
+
