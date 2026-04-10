@@ -127,7 +127,7 @@ button:active {
 transform: scale(0.96);
 box-shadow:
   0 4px 10px rgba(255, 77, 109, 0.3),
-  inset 0 0 8px rgba(255, 182, 193, 0.4);
+  inset 0 0 8px rgba(255, 181, 193, 0.4);
 }
 
 
