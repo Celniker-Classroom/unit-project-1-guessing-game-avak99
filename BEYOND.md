@@ -11,7 +11,7 @@ Score Quality Feedback
 
 Sound Effects and Animations (wave sound, confetti, bouncing text)
     __**Location:**__ JS lines ~20–45 (playBeep()), ~50–75 (triggerConfetti()), CSS ~300–320 (bounce)
-    __**Description:**__ A wave sound Hz plays briefly and confetti creates about 40 small colored squares that fall and rotate across the screen, and the win message bounces upward and back down (fun feeling!).
+    __**Description:**__ A wave sound plays briefly and confetti creates about 40 small colored squares that fall and rotate across the screen, and the win message bounces upward and back down (fun feeling!).
     __**Why:**__ The sound and animations make winning feel more exciting and visually satisfying.
 
 Dark Mode Toggle
@@ -42,7 +42,7 @@ Keyboard Support (Enter key to guess)
 Visual Effects (blue when cold, darker pink when hot)
     __**Location:**__ JS lines ~75–85 (setTempEffect()), CSS lines ~330–335
     __**Description:**__ The game applies classes that use hue-rotate, where cold uses hue-rotate(170deg) to shift the screen toward blue, warm uses hue-rotate(330deg) for pink tones, and hot uses hue-rotate(350deg) with higher saturation and brightness for a stronger pink/red.
-    __**Why:**__ This gives clear visual feedback showing how close the guess is to the correct answer. It relates the functionality of the game to interesting visual details.
+    __**Why:**__ This gives clear visual feedback showing how close the guess is to the correct answer. It relates the functionality of the game to interesting visual details which make the users more engaged.
 
 Voice Feedback ("too low", "too high", "correct")
     __**Location:**__ JS lines ~10–18 (speak()), lines ~150–165
