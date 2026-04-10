@@ -1,41 +1,50 @@
-# Above and Beyond Features
+***ABOVE AND BEYOND FEATURES***
+CSS Styling and Visual Design
+    __**Location:**__ CSS lines ~1–120 (body, container, buttons, title, input, labels)
+    __**Description:**__ The background uses a moving pink gradient (#ffd1dc, #ff9bb3, #ffdde1, #ffc1cc) animated over 14 seconds, the container has a semi transparent white glass effect with blur and layered shadows, buttons use a pink gradient (#ff4d6d to #ff85a2) with hover scaling (slightly tilted when hovered) and glow, the title has animated gradient text with glow (and this looks even cooler in “Dark Mode”), and “Play,” “Guess,” “Give Up” and “Dark Mode” scale and glow when interacted with.
+    __**Why:**__ The animations, gradients, and hover effects make the interface feel interactive and polished instead of flat.
 
-## 1. Input Validation
-- **Location**: `makeGuess()` function in `script.js` (lines 152-158)
-- **Description**: Checks if the guess is a valid number between 1 and the selected range (1-3, 1-10, and 1-100). If invalid, shows an error message and clears the input without counting it as a guess.
-- **Why it improves the game**: Prevents invalid guesses from being processed and provides clear feedback.
+Score Quality Feedback
+    __**Location:**__ JS lines ~170–180 inside makeGuess()
+    __**Description:**__ After winning, the game displays different messages based on guesses, such as "Amazing" for 1 guess, "Great job" for 3 or fewer, "Good job" for 5 or fewer, and "Nice work" otherwise.
+    __**Why:**__ This gives performance-based feedback so players feel rewarded based on how efficiently they guessed.
 
-## 2. Keyboard Support
-- **Location**: Event listener added in `script.js` (lines 30-35)
-- **Description**: Pressing Enter in the guess input field submits the guess, just like clicking the Guess button.
-- **Why it improves the game**: Enhances usability by allowing keyboard-only play, which is faster and often more enjoyable for users. 
+Sound Effects and Animations (wave sound, confetti, bouncing text)
+    __**Location:**__ JS lines ~20–45 (playBeep()), ~50–75 (triggerConfetti()), CSS ~300–320 (bounce)
+    __**Description:**__ A wave sound Hz plays briefly and confetti creates about 40 small colored squares that fall and rotate across the screen, and the win message bounces upward and back down (fun feeling!).
+    __**Why:**__ The sound and animations make winning feel more exciting and visually satisfying.
 
-## 3. Score Quality Feedback
-- **Location**: `makeGuess()` function in `script.js` (lines 175-181 and 195)
-- **Description**: When the player guesses correctly, additional feedback is shown: "Amazing!" (1 guess), "Great!" (2-3 guesses), "Good!" (4-5 guesses), or "Keep trying!" (more than 5).
-- **Why it improves the game**: Provides encouragement and motivation. It also makes wins significantly more satisfying.
+Dark Mode Toggle
+    __**Location:**__ HTML ~line 14, JS ~90–100, CSS ~180–260
+    __**Description:**__ Clicking the button toggles a dark mode class that changes the background to dark brown gradients and switches text and button colors to lighter and pinkish-orange tones.
+    __**Why:**__ This improves readability in different low-lighting conditions and gives users a visual preference option.
 
-## 4. Streak Tracking
-- **Location**: Added `streak` variable and logic in `script.js` (lines 10, 185, 230); display in `index.html` (line 32) and updated in `updateScore()` (lines 255-257)
-- **Description**: Tracks the current winning streak. Increments on each win, resets to 0 on give up. 
-- **Why it improves the game**: Adds a fun statistic that encourages players to maintain streaks, increasing replayability and engagement.
+Custom Difficulty Levels
+    __**Location:**__ HTML lines ~18–22, JS lines ~115–125
+    __**Description:**__ The player selects Easy (1–3), Medium (1–10), or Hard (1–100), and that value is used to set the range for the random number.
+    __**Why:**__ This lets players choose how challenging the game is.
 
-## 5. Dark Mode Toggle
-- **Location**: Button in `index.html` (line 14); event listener in `script.js` (lines 25-29); CSS styles in `style.css` (lines 201-235)
-- **Description**: A toggle button that switches between light and dark themes, changing colors, backgrounds, and gradients.
-- **Why it improves the game**: Adds a customizable feel and another option for users to enjoy the game in low-light environments. 
+Input Validation (out-of-range, non-numeric)
+    __**Location:**__ JS lines ~135–145
+    __**Description:**__ The game checks if the input is not a number or outside the selected range and shows an error message while clearing the input.
+    __**Why:**__ This prevents invalid guesses from counting towards the score and keeps the game functioning correctly.
 
-## 6. Animations
-- **Location**: CSS animation in `style.css` (lines 237-244); applied in `script.js` (lines 197-200)
-- **Description**: A bounce animation on the message when the player guesses correctly. (Ex. the sentences "Ava, Correct! You win! Good job!" bounce up and down when I input the correct number)
-- **Why it improves the game**: Adds visual excitement and celebration for wins. Also makes the game significantly more visually satisfying.
+Streak Tracking
+    __**Location:**__ JS lines ~1–10 (streak variable), ~175 (increment), ~235 (reset), HTML ~line 38
+    __**Description:**__ The game tracks a streak that increases with each win and resets when the player gives up, and displays it in the stats section.
+    __**Why:**__ This encourages consistent winning and adds a sense of progression, encouraging players to play again to beat their streak.
 
-## 7. Sound Effects
-- **Location**: `playBeep()` function in `script.js` (lines 13-30); called on win (line 199)
-- **Description**: Plays a short beep sound when the player guesses correctly using the Web Audio API.
-- **Why it improves the game**: Provides auditory feedback for wins, enhancing the celebratory feel and making the game more immersive.
+Keyboard Support (Enter key to guess)
+    __**Location:**__ JS lines ~100–105
+    __**Description:**__ The game allows players to click the enter key to guess instead of manually hovering over and pressing the “guess” button.
+    __**Why:**__ This allows faster gameplay without needing to click the button, increasing player satisfaction.
 
-## 8. Enhanced Styling
-- **Location**: Entire `style.css` file
-- **Description**: The CSS includes gradients (the entire background behind the container is a moving pink gradient that cycles between lighter pink and darker pink), animations, hover effects (buttons like "Play," "Guess," "Give Up," "Dark Mode," become slightly larger and shifted when you hover over them), shadows (drop shadow when you hover over "Play," "Guess," "Give Up," and "Dark Mode" as well as when you hover over the container), and responsive design elements.
-- **Why it improves the game**: Creates a visually appealing and modern interface that makes the game more enjoyable and professional-looking.
+Visual Effects (blue when cold, darker pink when hot)
+    __**Location:**__ JS lines ~75–85 (setTempEffect()), CSS lines ~330–335
+    __**Description:**__ The game applies classes that use hue-rotate, where cold uses hue-rotate(170deg) to shift the screen toward blue, warm uses hue-rotate(330deg) for pink tones, and hot uses hue-rotate(350deg) with higher saturation and brightness for a stronger pink/red.
+    __**Why:**__ This gives clear visual feedback showing how close the guess is to the correct answer. It relates the functionality of the game to interesting visual details.
+
+Voice Feedback ("too low", "too high", "correct")
+    __**Location:**__ JS lines ~10–18 (speak()), lines ~150–165
+    __**Description:**__ The game uses speech to say "Too high", "Too low", or "Correct" with normal and constant pitch, rate, and volume.
+    __**Why:**__ This adds audio feedback as another form of feedback and makes the game more interactive and accessible.
