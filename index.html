@@ -1,80 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title>Guessing Game</title>
- <link rel="stylesheet" href="style.css">
+<title>Guessing Game</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="container">
 
- <div class="container">
+  <!-- DATE -->
+  <p id="date" class="date"></p>
 
+  <h1 class="title"> ⭐Guessing Game⭐</h1>
 
-   <!-- DATE -->
-   <p id="date" class="date"></p>
+  <!-- DARK MODE TOGGLE -->
+  <button id="darkModeBtn">🌙 Dark Mode</button>
 
+  <!-- DIFFICULTY -->
+  <div class="levels">
+    <label><input type="radio" name="level" id="e" value="3"> Easy</label>
+    <label><input type="radio" name="level" id="m" value="10"> Medium</label>
+    <label><input type="radio" name="level" id="h" value="100"> Hard</label>
+  </div>
 
-   <h1 class="title"> ⭐Guessing Game⭐</h1>
+  <!-- CONTROLS -->
+  <div class="buttons">
+    <button id="playBtn">Play</button>
+    <button id="guessBtn">Guess</button>
+    <button id="giveUpBtn">Give Up</button>
+  </div>
 
-   <!-- DARK MODE TOGGLE -->
-   <button id="darkModeBtn">🌙 Dark Mode</button>
+  <input id="guess" type="number" placeholder="Enter your guess">
 
-   <!-- DIFFICULTY -->
-   <div class="levels">
-     <label><input type="radio" name="level" id="e" value="3"> Easy</label>
-     <label><input type="radio" name="level" id="m" value="10"> Medium</label>
-     <label><input type="radio" name="level" id="h" value="100"> Hard</label>
-   </div>
+  <!-- MESSAGE -->
+  <h3 id="msg"></h3>
 
+  <!-- STATS -->
+  <div class="stats">
+    <p>Wins: <span id="wins"></span></p>
+    <p>Avg Score: <span id="avgScore"></span></p>
+    <p>Fastest Time: <span id="fastest"></span></p>
+    <p>Avg Time: <span id="avgTime"></span></p>
+    <p>Current Streak: <span id="streak"></span></p>
+  </div>
 
-   <!-- CONTROLS -->
-   <div class="buttons">
-     <button id="playBtn">Play</button>
-     <button id="guessBtn">Guess</button>
-     <button id="giveUpBtn">Give Up</button>
-   </div>
+  <!-- LEADERBOARD -->
+  <div class="leaderboard">
+    <h3> Leaderboard</h3>
+    <ol>
+      <li name="leaderboard"></li>
+      <li name="leaderboard"></li>
+      <li name="leaderboard"></li>
+    </ol>
+  </div>
 
+</div>
 
-   <input id="guess" type="number" placeholder="Enter your guess">
+<!-- CONFETTI -->
+<div id="confetti-container"></div>
 
-
-   <!-- MESSAGE -->
-   <h3 id="msg"></h3>
-
-
-   <!-- THERMOMETER -->
-   <div class="thermometer-container">
-     <div id="thermoLabel">Warmth</div>
-     <div class="thermometer">
-       <div id="thermoFill"></div>
-     </div>
-   </div>
-
-
-   <!-- STATS -->
-   <div class="stats">
-     <p>Wins: <span id="wins"></span></p>
-     <p>Avg Score: <span id="avgScore"></span></p>
-     <p>Fastest Time: <span id="fastest"></span></p>
-     <p>Avg Time: <span id="avgTime"></span></p>
-     <p>Current Streak: <span id="streak"></span></p>
-   </div>
-
-
-   <!-- LEADERBOARD -->
-   <div class="leaderboard">
-     <h3> Leaderboard</h3>
-     <ol>
-       <li name="leaderboard"></li>
-       <li name="leaderboard"></li>
-       <li name="leaderboard"></li>
-     </ol>
-   </div>
-
-
- </div>
-
-
- <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
