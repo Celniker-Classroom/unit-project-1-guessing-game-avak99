@@ -11,53 +11,69 @@ let times = [];
 
 let streak = 0;
 
+
+// 🔊 ADDED: speech function (NEW ONLY)
+function speak(text) {
+  try {
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.rate = 1;
+    msg.pitch = 1;
+    msg.volume = 1;
+    speechSynthesis.speak(msg);
+  } catch (e) {}
+}
+
+
 // sound
 function playBeep(frequency = 800, duration = 200) {
- try {
-   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-   const oscillator = audioContext.createOscillator();
-   const gainNode = audioContext.createGain();
+try {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
 
-   oscillator.connect(gainNode);
-   gainNode.connect(audioContext.destination);
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
 
-   oscillator.frequency.value = frequency;
-   oscillator.type = 'sine';
+  oscillator.frequency.value = frequency;
+  oscillator.type = 'sine';
 
-   gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-   gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
+  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
 
-   oscillator.start();
-   oscillator.stop(audioContext.currentTime + duration / 1000);
- } catch (e) {}
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + duration / 1000);
+} catch (e) {}
 }
+
 
 // confetti
 function triggerConfetti() {
-  const container = document.getElementById("confetti-container");
+ const container = document.getElementById("confetti-container");
 
-  for (let i = 0; i < 40; i++) {
-    const piece = document.createElement("div");
-    piece.classList.add("confetti");
+ for (let i = 0; i < 40; i++) {
+   const piece = document.createElement("div");
+   piece.classList.add("confetti");
 
-    piece.style.left = Math.random() * 100 + "vw";
-    piece.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
-    piece.style.animationDuration = (Math.random() * 2 + 1) + "s";
+   piece.style.left = Math.random() * 100 + "vw";
+   piece.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+   piece.style.animationDuration = (Math.random() * 2 + 1) + "s";
 
-    container.appendChild(piece);
+   container.appendChild(piece);
 
-    setTimeout(() => piece.remove(), 2000);
-  }
+   setTimeout(() => piece.remove(), 2000);
+ }
 }
+
 
 // temp effects
 function setTempEffect(diff) {
-  document.body.classList.remove("cold", "warm", "hot");
+ document.body.classList.remove("cold", "warm", "hot");
 
-  if (diff <= 2) document.body.classList.add("hot");
-  else if (diff <= 5) document.body.classList.add("warm");
-  else document.body.classList.add("cold");
+ if (diff <= 2) document.body.classList.add("hot");
+ else if (diff <= 5) document.body.classList.add("warm");
+ else document.body.classList.add("cold");
 }
+
 
 let playerName = prompt("Enter your name:") || "Player";
 playerName = playerName.trim();
@@ -77,14 +93,14 @@ guessBtn.addEventListener("click", makeGuess);
 giveUpBtn.addEventListener("click", giveUp);
 
 darkModeBtn.addEventListener("click", function() {
- document.body.classList.toggle("dark-mode");
- darkModeBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+document.body.classList.toggle("dark-mode");
+darkModeBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
 });
 
 guessInput.addEventListener("keydown", function(event) {
- if (event.key === "Enter" && !guessBtn.disabled) {
-   makeGuess();
- }
+if (event.key === "Enter" && !guessBtn.disabled) {
+  makeGuess();
+}
 });
 
 guessBtn.disabled = true;
@@ -96,6 +112,7 @@ document.getElementById("fastest").textContent = "--";
 document.getElementById("avgTime").textContent = "--";
 document.getElementById("streak").textContent = streak;
 
+
 // date
 function getSuffix(day) {
 if (day >= 11 && day <= 13) return "th";
@@ -105,12 +122,13 @@ if (day % 10 === 3) return "rd";
 return "th";
 }
 
+
 function time() {
 let now = new Date();
 
 let months = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December"
+ "January","February","March","April","May","June",
+ "July","August","September","October","November","December"
 ];
 
 let day = now.getDate();
@@ -132,6 +150,7 @@ document.getElementById("date").textContent = time();
 
 document.getElementById("date").textContent = time();
 
+
 // PLAY
 function play() {
 let selected = document.querySelector('input[name="level"]:checked');
@@ -145,7 +164,7 @@ startTime = new Date().getTime();
 document.body.classList.remove("cold", "warm", "hot");
 
 document.getElementById("msg").textContent =
-  `${playerName}, start guessing! Range: 1 - ${range}`;
+ `${playerName}, start guessing! Range: 1 - ${range}`;
 
 guessBtn.disabled = false;
 giveUpBtn.disabled = false;
@@ -156,70 +175,83 @@ radios.forEach(r => r.disabled = true);
 guessInput.focus();
 }
 
+
 // GUESS
 function makeGuess() {
 let guess = parseInt(guessInput.value);
 if (isNaN(guess) || guess < 1 || guess > range) {
-  document.getElementById("msg").textContent = `${playerName}, please enter a number between 1 and ${range}!`;
-  guessInput.value = "";
-  return;
+ document.getElementById("msg").textContent =
+ `${playerName}, please enter a number between 1 and ${range}!`;
+ guessInput.value = "";
+ return;
 }
 
 guessCount++;
 
 let msg = "";
 
-if (guess > answer) msg = "Too high";
-else if (guess < answer) msg = "Too low";
-else msg = "Correct";
+// 🔊 ADDED SPEECH ONLY HERE
+if (guess > answer) {
+ msg = "Too high";
+ speak("Too high");
+}
+else if (guess < answer) {
+ msg = "Too low";
+ speak("Too low");
+}
+else {
+ msg = "Correct";
+ speak("Correct");
+}
 
 let diff = Math.abs(guess - answer);
 
 if (guess !== answer) {
-  setTempEffect(diff);
+ setTempEffect(diff);
 
-  if (diff <= 2) msg += " Hot";
-  else if (diff <= 5) msg += " Warm";
-  else msg += " Cold";
+ if (diff <= 2) msg += " Hot";
+ else if (diff <= 5) msg += " Warm";
+ else msg += " Cold";
 
-  document.getElementById("msg").textContent = `${playerName}, ${msg}`;
+ document.getElementById("msg").textContent = `${playerName}, ${msg}`;
 } else {
 
-  triggerConfetti();
-  document.body.classList.remove("cold", "warm", "hot");
+ triggerConfetti();
+ document.body.classList.remove("cold", "warm", "hot");
 
-  guessBtn.disabled = true;
+ guessBtn.disabled = true;
 
-  streak++;
-  wins++;
-  totalGuesses += guessCount;
+ streak++;
+ wins++;
+ totalGuesses += guessCount;
 
-  let quality = "You win! Great job!";
-  if (guessCount === 1) quality = "You win! Amazing!";
-  else if (guessCount <= 3) quality = "You win! Great job!";
-  else if (guessCount <= 5) quality = "You win! Good job!";
-  else quality = "You win! Nice work!";
+ let quality = "You win! Great job!";
+ if (guessCount === 1) quality = "You win! Amazing!";
+ else if (guessCount <= 3) quality = "You win! Great job!";
+ else if (guessCount <= 5) quality = "You win! Good job!";
+ else quality = "You win! Nice work!";
 
-  document.getElementById("msg").textContent =
-    `${playerName}, ${msg}! ${quality}`;
+ document.getElementById("msg").textContent =
+   `${playerName}, ${msg}! ${quality}`;
 
-  updateScore(guessCount);
-  updateTimers(new Date().getTime());
-  reset();
+ updateScore(guessCount);
+ updateTimers(new Date().getTime());
+ reset();
 
-  document.getElementById("msg").classList.add("success");
-  setTimeout(() => document.getElementById("msg").classList.remove("success"), 1000);
-  playBeep(800, 300);
+ document.getElementById("msg").classList.add("success");
+ setTimeout(() => document.getElementById("msg").classList.remove("success"), 1000);
+ playBeep(800, 300);
 }
 
 guessInput.value = "";
 }
 
+
 // SCORE
 function updateScore(score) {
 document.getElementById("wins").textContent = wins;
 document.getElementById("avgScore").textContent =
-  wins > 0 ? (totalGuesses / wins).toFixed(0) : "--";
+ wins > 0 ? (totalGuesses / wins).toFixed(0) : "--";
 
 scores.push(score);
 scores.sort((a, b) => a - b);
@@ -227,11 +259,12 @@ scores.sort((a, b) => a - b);
 let items = document.getElementsByName("leaderboard");
 
 for (let i = 0; i < 3; i++) {
-  items[i].textContent = scores[i] !== undefined ? scores[i] : "--";
+ items[i].textContent = scores[i] !== undefined ? scores[i] : "--";
 }
 
 document.getElementById("streak").textContent = streak;
 }
+
 
 // GIVE UP
 function giveUp() {
@@ -244,7 +277,7 @@ updateScore(range);
 updateTimers(new Date().getTime());
 
 document.getElementById("msg").textContent =
-  `${playerName}, you gave up! The answer was ${answer}`;
+ `${playerName}, you gave up! The answer was ${answer}`;
 
 guessBtn.disabled = true;
 giveUpBtn.disabled = true;
@@ -252,6 +285,7 @@ playBtn.disabled = false;
 
 reset();
 }
+
 
 // TIMER
 function updateTimers(endTime) {
@@ -264,6 +298,7 @@ let avg = times.reduce((a, b) => a + b, 0) / times.length;
 document.getElementById("fastest").textContent = fastest.toFixed(2);
 document.getElementById("avgTime").textContent = avg.toFixed(2);
 }
+
 
 // RESET
 function reset() {
